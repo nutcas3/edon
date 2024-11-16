@@ -1,9 +1,11 @@
 package integration
 
 import (
-    "os"
-    "path/filepath"
-    "testing"
+	"os"
+	"path/filepath"
+	"testing"
+
+	"github.com/katungi/edon/internals/runtime"
 )
 
 func TestFileExecution(t *testing.T) {

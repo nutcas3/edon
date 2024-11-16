@@ -1,7 +1,9 @@
 package unit
 
-import ("testing"
-		"github.com/katungi/edon/cmd/runtime"
+import (
+	"testing"
+
+	"github.com/katungi/edon/internals/runtime"
 )
 
 func TestingBasicExecution(t *testing.T) {
