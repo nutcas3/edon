@@ -1,6 +1,8 @@
 package unit
 
-import "testing"
+import ("testing"
+		"github.com/katungi/edon/cmd/runtime"
+)
 
 func TestingBasicExecution(t *testing.T) {
 	test := []struct {
