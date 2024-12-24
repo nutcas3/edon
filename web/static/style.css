@@ -1,42 +1,48 @@
 body {
     margin: 0;
     padding: 20px;
-    font-family: 'Menlo', 'Monaco', monospace;
-    background-color: #1e1e1e;
-    color: #d4d4d4;
+    font-family: monospace;
+    background-color: #000;
+    color: #fff;
+    line-height: 1.6;
 }
 
 .container {
     max-width: 800px;
     margin: 0 auto;
-}
-
-h1 {
-    color: #569cd6;
     text-align: center;
 }
 
-.terminal {
-    background-color: #2d2d2d;
-    border-radius: 4px;
-    padding: 10px;
+h1 {
+    color: #fff;
+    font-size: 24px;
     margin-bottom: 10px;
+}
+
+.terminal {
+    background-color: #000;
+    border: 1px dashed #fff;
+    border-radius: 0;
+    padding: 20px;
+    margin: 20px 0;
     min-height: 300px;
     max-height: 500px;
     overflow-y: auto;
     white-space: pre-wrap;
+    text-align: left;
 }
 
 .input-container {
     display: flex;
     align-items: center;
-    background-color: #2d2d2d;
-    border-radius: 4px;
+    background-color: #000;
+    border: 1px dashed #fff;
     padding: 10px;
+    margin-top: 10px;
 }
 
 .prompt {
-    color: #569cd6;
+    color: #fff;
     margin-right: 10px;
 }
 
@@ -44,8 +50,8 @@ h1 {
     flex: 1;
     background: none;
     border: none;
-    color: #d4d4d4;
-    font-family: inherit;
+    color: #fff;
+    font-family: monospace;
     font-size: inherit;
     outline: none;
 }
@@ -55,9 +61,9 @@ h1 {
 }
 
 .error {
-    color: #f44747;
+    color: #ff4444;
 }
 
 .success {
-    color: #6a9955;
+    color: #fff;
 }

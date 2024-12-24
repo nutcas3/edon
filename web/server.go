@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/katungi/edon/internals/runtime"
@@ -19,6 +21,12 @@ type EvalResponse struct {
 }
 
 func main() {
+	// Get port from environment variable or default to 8080
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	// Create a new runtime instance
 	rt, err := runtime.New()
 	if err != nil {
@@ -52,28 +60,38 @@ func main() {
 			return
 		}
 
-		// Create a string builder to capture output
-		var output strings.Builder
+		// Capture stdout
+		oldStdout := os.Stdout
+		pipeReader, pipeWriter, _ := os.Pipe()
+		os.Stdout = pipeWriter
 
 		// Evaluate the code
-		err := rt.Eval(req.Code)
+		evalErr := rt.Eval(req.Code)
 		
+		// Read the output
+		pipeWriter.Close()
+		var buf strings.Builder
+		io.Copy(&buf, pipeReader)
+		os.Stdout = oldStdout
+		pipeReader.Close()
+
 		response := EvalResponse{}
-		if err != nil {
-			response.Error = err.Error()
+		if evalErr != nil {
+			response.Error = evalErr.Error()
 		} else {
-			response.Output = output.String()
-			if response.Output == "" {
-				response.Output = "undefined"
+			output := buf.String()
+			if output == "" {
+				output = "=> " + req.Code
 			}
+			response.Output = output
 		}
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 	})
 
-	log.Println("Server starting on http://localhost:8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	log.Printf("Server starting on http://localhost:%s\n", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
 	}
 }
