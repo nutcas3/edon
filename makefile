@@ -27,7 +27,7 @@ run: build
 
 test:
 	@echo "Running tests..."
-	@go test -v ./...
+	@go test -v ./tests/...
 
 dev: build
 	@./bin/$(BINARY_NAME)

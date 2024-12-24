@@ -6,7 +6,7 @@ import (
 	"github.com/katungi/edon/internals/runtime"
 )
 
-func TestingBasicExecution(t *testing.T) {
+func TestBasicExecution(t *testing.T) {
 	test := []struct {
 		name    string
 		script  string

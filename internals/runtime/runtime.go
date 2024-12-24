@@ -18,7 +18,7 @@ type Runtime struct {
 }
 
 const (
-	prompt      = ">> (ﾉ˚Д˚)ﾉ ⌒┻━┻"
+	prompt      = ">>"
 	multiPrompt = "..."
 )
 
@@ -29,9 +29,7 @@ var (
 )
 
 func New() (*Runtime, error) {
-	fmt.Println("Creating new runtime...")
 	rt := quickjs.NewRuntime()
-	fmt.Println("Creating new context...")
 	ctx := rt.NewContext()
 
 	r := &Runtime{
@@ -40,15 +38,12 @@ func New() (*Runtime, error) {
 	}
 
 	// Initialize built-in modules
-	fmt.Println("Initializing built-in modules...")
 	if err := r.initializeBuiltins(); err != nil {
 		fmt.Printf("Failed to initialize builtins: %v\n", err)
 		ctx.Close()
 		rt.Close()
 		return nil, fmt.Errorf("failed to initialize builtins: %w", err)
 	}
-	fmt.Println("Runtime initialization complete")
-
 	return r, nil
 }
 
@@ -207,69 +202,68 @@ func (r *Runtime) StartREPL() error {
 
 // isIncomplete checks if the input code block is incomplete and needs more lines
 func isIncomplete(line string) bool {
-    line = strings.TrimSpace(line)
-    
-    // Check for obvious continuation cases
-    if strings.HasSuffix(line, "{") ||
-       strings.HasSuffix(line, "\\") ||
-       strings.HasSuffix(line, ".") {
-        return true
-    }
+	line = strings.TrimSpace(line)
 
-    // Count brackets/braces/parentheses
-    brackets := 0
-    braces := 0
-    parens := 0
+	// Check for obvious continuation cases
+	if strings.HasSuffix(line, "{") ||
+		strings.HasSuffix(line, "\\") ||
+		strings.HasSuffix(line, ".") {
+		return true
+	}
 
-    for _, ch := range line {
-        switch ch {
-        case '[':
-            brackets++
-        case ']':
-            brackets--
-        case '{':
-            braces++
-        case '}':
-            braces--
-        case '(':
-            parens++
-        case ')':
-            parens--
-        }
-    }
+	// Count brackets/braces/parentheses
+	brackets := 0
+	braces := 0
+	parens := 0
 
-    return brackets > 0 || braces > 0 || parens > 0
+	for _, ch := range line {
+		switch ch {
+		case '[':
+			brackets++
+		case ']':
+			brackets--
+		case '{':
+			braces++
+		case '}':
+			braces--
+		case '(':
+			parens++
+		case ')':
+			parens--
+		}
+	}
+
+	return brackets > 0 || braces > 0 || parens > 0
 }
-
 
 // createCompleter creates an autocomplete handler
 func createCompleter() *readline.PrefixCompleter {
-    return readline.NewPrefixCompleter(
-        readline.PcItem("console.log"),
-        readline.PcItem("let"),
-        readline.PcItem("const"),
-        readline.PcItem("function"),
-        readline.PcItem("return"),
-        readline.PcItem("if"),
-        readline.PcItem("else"),
-        readline.PcItem("for"),
-        readline.PcItem("while"),
-        readline.PcItem(".help"),
-        readline.PcItem(".exit"),
-        readline.PcItem(".clear"),
-    )
+	return readline.NewPrefixCompleter(
+		readline.PcItem("console.log"),
+		readline.PcItem("let"),
+		readline.PcItem("const"),
+		readline.PcItem("function"),
+		readline.PcItem("return"),
+		readline.PcItem("if"),
+		readline.PcItem("else"),
+		readline.PcItem("for"),
+		readline.PcItem("while"),
+		readline.PcItem(".help"),
+		readline.PcItem(".exit"),
+		readline.PcItem(".clear"),
+	)
 }
 
 // printWelcome prints the REPL welcome message
 func printWelcome() {
-    color.Cyan("Welcome to Halo REPL!")
-    color.Cyan("Type .help for more information")
-    fmt.Println()
+	color.Cyan("Welcome to Halo REPL!")
+	color.Cyan("Type .help for more information")
+	fmt.Println()
 }
 
 // printHelp prints the help information
 func printHelp() {
-    help := `
+	help := `
 Commands:
   .help, help    Show this help message
   .exit, exit    Exit the REPL
@@ -281,5 +275,5 @@ Special Keys:
   Up/Down        Navigate through history
   Tab            Auto-complete
 `
-    color.Yellow(help)
+	color.Yellow(help)
 }
