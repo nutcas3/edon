@@ -19,13 +19,23 @@ var (
 )
 
 func main() {
-	if len(os.Args) > 1 && os.Args[1] == "install" {
-		installCmd.Parse(os.Args[2:])
-		if err := handleInstall(); err != nil {
-			color.Red("Error: %v", err)
-			os.Exit(1)
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "install":
+			InstallCmd.Parse(os.Args[2:])
+			if err := HandleInstall(); err != nil {
+				color.Red("Error: %v", err)
+				os.Exit(1)
+			}
+			return
+		case "init":
+			InitCmd.Parse(os.Args[2:])
+			if err := HandleInit(); err != nil {
+				color.Red("Error: %v", err)
+				os.Exit(1)
+			}
+			return
 		}
-		return
 	}
 
 	flag.Usage = printHelp

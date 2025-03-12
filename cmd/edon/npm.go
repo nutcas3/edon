@@ -9,11 +9,11 @@ import (
 )
 
 var (
-	installCmd = flag.NewFlagSet("install", flag.ExitOnError)
+	InstallCmd = flag.NewFlagSet("install", flag.ExitOnError)
 )
 
-func handleInstall() error {
-	if installCmd.NArg() < 1 {
+func HandleInstall() error {
+	if InstallCmd.NArg() < 1 {
 		return fmt.Errorf("package name is required")
 	}
 
@@ -22,7 +22,7 @@ func handleInstall() error {
 		return fmt.Errorf("failed to initialize NPM package manager: %v", err)
 	}
 
-	for _, pkg := range installCmd.Args() {
+	for _, pkg := range InstallCmd.Args() {
 		fmt.Printf("Installing %s...\n", pkg)
 		path, err := pm.InstallPackage(context.Background(), pkg)
 		if err != nil {
