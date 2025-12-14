@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/katungi/edon/internal/runtime"
@@ -25,9 +26,10 @@ type Server struct {
 	rt     *runtime.Runtime
 	port   string
 	server *http.Server
+	evalMu sync.Mutex // Serializes eval requests to avoid stdout race
 }
 
-func New(staticDir string) (*Server, error) {
+func New() (*Server, error) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -78,6 +80,10 @@ func (s *Server) Start(staticDir string) error {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+
+		// Serialize eval requests to avoid stdout race condition
+		s.evalMu.Lock()
+		defer s.evalMu.Unlock()
 
 		// Capture stdout
 		oldStdout := os.Stdout

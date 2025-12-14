@@ -42,7 +42,7 @@ func New() (*Runtime, error) {
 	if err := r.initializeBuiltins(); err != nil {
 		ctx.Close()
 		rt.Close()
-		return nil, errors.Wrap(errors.ErrBuiltinInit, err.Error())
+		return nil, errors.WrapWith(errors.ErrBuiltinInit, err, "initialize builtins")
 	}
 	return r, nil
 }
@@ -50,7 +50,7 @@ func New() (*Runtime, error) {
 func (r *Runtime) initializeBuiltins() error {
 	// Add console module
 	if err := console.Init(r.context); err != nil {
-		return errors.Wrap(errors.ErrConsoleInit, err.Error())
+		return errors.WrapWith(errors.ErrConsoleInit, err, "console module")
 	}
 	return nil
 }
@@ -111,7 +111,7 @@ func (r *Runtime) StartREPL() error {
 	})
 
 	if err != nil {
-		return errors.Wrap(errors.ErrRuntimeInit, "failed to create readline instance")
+		return errors.WrapWith(errors.ErrRuntimeInit, err, "create readline instance")
 	}
 	defer rl.Close()
 

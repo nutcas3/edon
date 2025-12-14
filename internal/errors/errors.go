@@ -56,6 +56,18 @@ func Wrap(err error, msg string) error {
 	return fmt.Errorf("%s: %w", msg, err)
 }
 
+// WrapWith joins a sentinel/category error with a cause (both discoverable via errors.Is)
+func WrapWith(sentinel, cause error, msg string) error {
+	if sentinel == nil && cause == nil {
+		return nil
+	}
+	joined := errors.Join(sentinel, cause)
+	if msg == "" {
+		return joined
+	}
+	return fmt.Errorf("%s: %w", msg, joined)
+}
+
 // Is checks if an error matches a target error
 func Is(err, target error) bool {
 	return errors.Is(err, target)

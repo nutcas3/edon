@@ -4,7 +4,7 @@ A Deno-like JavaScript runtime built in Go, powered by QuickJS.
 
 ## Project Structure
 
-```
+```text
 edon/
 ├── cmd/                    # Application entry points
 │   ├── edon/               # Main CLI (REPL, file execution, package management)
@@ -44,11 +44,16 @@ make build-all
 ### Run
 
 ```bash
-./bin/halo
-./bin/halo script.js
-./bin/halo -eval "console.log('Hello!')"
-./bin/halo init
-./bin/halo install lodash
+# Main CLI
+./bin/halo                              # Start REPL
+./bin/halo script.js                    # Execute a file
+./bin/halo -eval "console.log('Hi!')"   # Evaluate inline code
+./bin/halo init                         # Initialize a project
+./bin/halo install lodash               # Install NPM package
+
+./bin/halo-runtime script.js
+
+./bin/halo-web
 ```
 
 ### Development

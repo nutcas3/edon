@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	srv, err := server.New("cmd/web/static")
+	srv, err := server.New()
 	if err != nil {
 		log.Fatalf("Failed to create server: %v", err)
 	}
