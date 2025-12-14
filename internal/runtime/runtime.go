@@ -3,7 +3,7 @@ package runtime
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/buke/quickjs-go"
@@ -33,7 +33,7 @@ func New() (*Runtime, error) {
 	ctx := rt.NewContext()
 
 	r := &Runtime{
-		jsRuntime: &rt,
+		jsRuntime: rt,
 		context:   ctx,
 	}
 
@@ -56,9 +56,9 @@ func (r *Runtime) initializeBuiltins() error {
 }
 
 func (r *Runtime) Eval(script string) error {
-	result, err := r.context.Eval(script)
-	if err != nil {
-		return err
+	result := r.context.Eval(script)
+	if result.IsException() {
+		return fmt.Errorf("%s", result.String())
 	}
 	if !result.IsUndefined() {
 		fmt.Println(result.String())
@@ -67,14 +67,14 @@ func (r *Runtime) Eval(script string) error {
 }
 
 func (r *Runtime) ExecuteFile(filename string) error {
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("failed to read file: %w", err)
 	}
 
-	result, err := r.context.Eval(string(data))
-	if err != nil {
-		return err
+	result := r.context.Eval(string(data))
+	if result.IsException() {
+		return fmt.Errorf("%s", result.String())
 	}
 	if !result.IsUndefined() {
 		fmt.Println(result.String())
@@ -181,9 +181,9 @@ func (r *Runtime) StartREPL() error {
 
 		// Execute the code
 		fmt.Printf("Executing code: %s\n", code.String())
-		result, err := r.context.Eval(code.String())
-		if err != nil {
-			color.Red("Error: %v", err)
+		result := r.context.Eval(code.String())
+		if result.IsException() {
+			color.Red("Error: %v", result.String())
 		} else {
 			if !result.IsUndefined() && !result.IsNull() {
 				// Convert result to string and print
