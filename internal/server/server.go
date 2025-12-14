@@ -47,6 +47,9 @@ func New() (*Server, error) {
 }
 
 func (s *Server) Close() {
+	if s.server != nil {
+		_ = s.server.Close()
+	}
 	if s.rt != nil {
 		s.rt.Close()
 	}

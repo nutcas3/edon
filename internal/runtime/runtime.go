@@ -69,7 +69,7 @@ func (r *Runtime) Eval(script string) error {
 func (r *Runtime) ExecuteFile(filename string) error {
 	data, err := os.ReadFile(filename)
 	if err != nil {
-		return errors.Wrap(errors.ErrFileRead, err.Error())
+		return errors.WrapWith(errors.ErrFileRead, err, "")
 	}
 
 	result := r.context.Eval(string(data))
