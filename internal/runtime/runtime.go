@@ -9,7 +9,7 @@ import (
 	"github.com/buke/quickjs-go"
 	"github.com/chzyer/readline"
 	"github.com/fatih/color"
-	"github.com/katungi/edon/internals/modules/console"
+	"github.com/katungi/edon/internal/modules/console"
 )
 
 type Runtime struct {
